@@ -3,106 +3,84 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import Navbar from '../components/Navbar'
 
-
 function CreateProduct() {
+  const navigate = useNavigate()
 
-const [formData, setFormData] = useState({
-    "_id": "",
-    "title": "",
-    "description": "",
-    "category": "",
-    "price": '',
-    "quantity": '',
-    "createdAt": "",
-    "updatedAt": ""
-})
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    price: "",
+    quantity: ""
+  })
 
-function handleChange(e){
-    setFormData({...formData,[e.target.name]: e.target.value})
-}
+  function handleChange(e) {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
-async function sumbit(e){
+  async function handleSubmit(e) {
     e.preventDefault()
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}`,formData)
-}
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/products`, {...formData})
+      navigate('/products')
+    } catch (error) {
+      console.error("Error creating product:", error)
+    }
+  }
 
   return (
-    
     <div>
-        <Navbar/>
-        
-        <h1>Create Product</h1>
+      <Navbar />
+      <h1>Create Product</h1>
 
-
-        <form onSubmit={sumbit}>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="title">Product Title</label>
         <input 
-        type="text"
-        value={formData.title}
-        onChange={handleChange}
-        name='title'
-        id='title'
+          type="text"
+          value={formData.title}
+          onChange={handleChange}
+          name="title"
+          id="title"
         />
 
         <label htmlFor="description">Description</label>
         <input 
-        type="text"
-        value={formData.description}
-        onChange={handleChange}
-        name='description'
-        id='description'
+          type="text"
+          value={formData.description}
+          onChange={handleChange}
+          name="description"
+          id="description"
         />
 
         <label htmlFor="category">Category</label>
         <input 
-        type="text"
-        value={formData.category}
-        onChange={handleChange}
-        name='category'
-        id='category'
+          type="text"
+          value={formData.category}
+          onChange={handleChange}
+          name="category"
+          id="category"
         />
 
         <label htmlFor="price">Price</label>
         <input 
-        type="text"
-        value={formData.price}
-        onChange={handleChange}
-        name='price'
-        id='price'
+          type="number"
+          value={formData.price}
+          onChange={handleChange}
+          name="price"
+          id="price"
         />
 
         <label htmlFor="quantity">Quantity</label>
         <input 
-        type="text"
-        value={formData.quantity}
-        onChange={handleChange}
-        name='quantity'
-        id='quantity'
+          type="number"
+          value={formData.quantity}
+          onChange={handleChange}
+          name="quantity"
+          id="quantity"
         />
 
-        <label htmlFor="createdAt">CreatedAt</label>
-        <input 
-        type="text"
-        value={formData.createdAt}
-        onChange={handleChange}
-        name='createdAt'
-        id='createdAt'
-        />
-
-        <label htmlFor="updatedAt">UpdatedAt</label>
-        <input 
-        type="text"
-        value={formData.updatedAt}
-        onChange={handleChange}
-        name='updatedAt'
-        id='updatedAt'
-        />
-
-        <button>Create Student</button>
-        </form>
-
-
-
+        <button type="submit">Create Product</button>
+      </form>
     </div>
   )
 }
